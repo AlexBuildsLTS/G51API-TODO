@@ -1,14 +1,17 @@
 package se.alex.lexicon.g51todoapi.domain.dto;
 
 import lombok.*;
-import java.util.List;
+
+import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class PersonDTOForm {
+public class PersonDTOView {
+    private Long id;
     private String name;
     private String email;
+    private Set<TaskDTOView> tasks;  // Linked tasks if needed
 }

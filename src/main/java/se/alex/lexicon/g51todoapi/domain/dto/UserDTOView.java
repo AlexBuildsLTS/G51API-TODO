@@ -8,8 +8,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDTOForm {
+public class UserDTOView {
     private String email;
-    private String password;
-    private Set<RoleDTOForm> roles;
+    private Set<RoleDTOView> roles;
 }

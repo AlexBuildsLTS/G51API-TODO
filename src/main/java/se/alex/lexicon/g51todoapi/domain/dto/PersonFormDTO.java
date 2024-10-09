@@ -1,15 +1,13 @@
 package se.alex.lexicon.g51todoapi.domain.dto;
 
 import lombok.*;
-import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDTOForm {
+public class PersonFormDTO {
+    private String name;
     private String email;
-    private String password;
-    private Set<RoleDTOForm> roles;
 }
