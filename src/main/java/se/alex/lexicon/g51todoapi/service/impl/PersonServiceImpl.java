@@ -3,6 +3,7 @@ package se.alex.lexicon.g51todoapi.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.alex.lexicon.g51todoapi.converter.PersonConverter;
+import se.alex.lexicon.g51todoapi.domain.dto.PersonDTOForm;
 import se.alex.lexicon.g51todoapi.domain.dto.PersonDTOView;
 import se.alex.lexicon.g51todoapi.entity.Person;
 import se.alex.lexicon.g51todoapi.exception.DataNotFoundException;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PersonServiceImpl implements PersonService<PersonDTOView> {
+public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;
     private final PersonConverter personConverter;
@@ -25,9 +26,10 @@ public class PersonServiceImpl implements PersonService<PersonDTOView> {
     }
 
     @Override
-    public PersonDTOView createPerson ( Object o ) {
-        // Implementation required: Convert and save the Person entity.
-        return null; // Placeholder for future implementation.
+    public PersonDTOView createPerson(PersonDTOForm personDTOForm) {
+        Person person = personConverter.toPersonEntity(personDTOForm);
+        Person savedPerson = personRepository.save(person);
+        return personConverter.toPersonDTOView(savedPerson);
     }
 
     @Override
@@ -38,27 +40,32 @@ public class PersonServiceImpl implements PersonService<PersonDTOView> {
     }
 
     @Override
+    public List<PersonDTOView> getAllPersons() {
+        return personRepository.findAll().stream()
+                .map(personConverter::toPersonDTOView)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<PersonDTOView> getPersonsByName(String name) {
         return personRepository.findByName(name).stream()
                 .map(personConverter::toPersonDTOView)
                 .collect(Collectors.toList());
     }
 
-    /**
-     */
     @Override
-    public List < PersonDTOView > getPersonsByEmail ( String email ) {
-        return List.of( );
-    }
-
-    @Override
-    public PersonDTOView createPerson ( PersonDTOForm personDTOForm ) {
-        return PersonService.super.createPerson( personDTOForm );
+    public List<PersonDTOView> getPersonsByEmail(String email) {
+        return personRepository.findByEmail(email).stream()
+                .map(personConverter::toPersonDTOView)
+                .collect(Collectors.toList());
     }
 
     @Override
     public PersonDTOView updatePerson(PersonDTOView personDTOView) {
-        // Placeholder for updating an existing person.
-        return null; // Implement the update logic.
+        Person person = personRepository.findById(personDTOView.getId())
+                .orElseThrow(() -> new DataNotFoundException("Person with ID " + personDTOView.getId() + " not found."));
+        personConverter.updatePersonEntityFromDTO(personDTOView, person);
+        Person updatedPerson = personRepository.save(person);
+        return personConverter.toPersonDTOView(updatedPerson);
     }
 }

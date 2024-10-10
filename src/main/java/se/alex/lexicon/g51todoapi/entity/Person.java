@@ -3,6 +3,7 @@ package se.alex.lexicon.g51todoapi.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.net.ProtocolFamily;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,14 +37,20 @@ public class Person {
         this.id = id;
     }
 
-    private void addTask( Task... tasks ) { // task1, task2
-        if (Objects.requireNonNull( tasks ).length == 0)
-            throw new IllegalArgumentException( "Tasks cannot be empty" );
-        for (Task task : tasks) {
-            this.tasks.add( task );
-            task.setPerson( this );
-        }
+    public static ProtocolFamily builder ( ) {
+        return null;
     }
+
+// --Commented out by Inspection START (10/10/24, 9:39 AM):
+//    private void addTask( Task... tasks ) { // task1, task2
+//        if (Objects.requireNonNull( tasks ).length == 0)
+//            throw new IllegalArgumentException( "Tasks cannot be empty" );
+//        for (Task task : tasks) {
+//            this.tasks.add( task );
+//            task.setPerson( this );
+//        }
+//    }
+// --Commented out by Inspection STOP (10/10/24, 9:39 AM)
 
     private void removeTask ( ) {
         removeTask ( (Task[]) null );

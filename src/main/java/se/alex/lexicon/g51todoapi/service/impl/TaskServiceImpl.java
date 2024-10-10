@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.alex.lexicon.g51todoapi.converter.TaskConverter;
+import se.alex.lexicon.g51todoapi.domain.dto.TaskDTO;
 import se.alex.lexicon.g51todoapi.domain.dto.TaskDTOForm;
 import se.alex.lexicon.g51todoapi.domain.dto.TaskDTOView;
 import se.alex.lexicon.g51todoapi.entity.Person;
@@ -52,6 +53,17 @@ public class TaskServiceImpl implements TaskService {
                 .map(taskConverter::toTaskDTOView)
                 .collect(Collectors.toList());
     }
+    @Override
+    public void deleteTask ( Long id ) {
+
+    }
+
+
+    @Override
+    public TaskDTO updateTask ( Long id, TaskDTO taskDTO ) {
+        return null;
+    }
+
 
     @Override
     @Transactional
@@ -61,4 +73,6 @@ public class TaskServiceImpl implements TaskService {
         task.setDone(true);
         taskRepository.save(task);
     }
+
+
 }

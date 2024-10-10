@@ -1,43 +1,41 @@
 package se.alex.lexicon.g51todoapi.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.List;
 
-@Setter
-@Getter
 @Entity
-@Table(name = "user_roles")
+@Getter
+@Setter
+
 public class Role {
 
-    private final String roleUser;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-
-    @ManyToOne
-    @JoinColumn(name = "user_email", referencedColumnName = "email", nullable = false)
-    private User user;
-    @ManyToOne
-    private Role role;
-
-    @Setter
-    @Getter
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public Role ( String roleUser ) {
-        this.roleUser = roleUser;
+    private String User;
+
+    @ManyToMany(mappedBy = "roles")
+    private List<User> users;
+
+    // Constructors
+    public Role(String roleName) {
+        this.User = roleName;
     }
 
-    public Role ( Long id ) {
-
-        roleUser = "ADMIN";
-        role = new Role( id );
+    public Role(Long id) {
+        this.id = id;
     }
 
-    public Role ( ) {
+    public Role() {
 
-        roleUser = String.valueOf ( id );
     }
 
     public String getName ( ) {

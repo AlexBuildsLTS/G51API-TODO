@@ -3,6 +3,8 @@ package se.alex.lexicon.g51todoapi.converter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import se.alex.lexicon.g51todoapi.domain.dto.UserDTOForm;
 import se.alex.lexicon.g51todoapi.domain.dto.UserDTOView;
@@ -31,7 +33,8 @@ public final class UserConverter {
         return null;
     }
 
-    public UserDTOView toUserDTOView ( User user ) {
+    @Contract(pure = true)
+    public @Nullable UserDTOView toUserDTOView ( User user ) {
         return null;
     }
 }

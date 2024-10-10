@@ -8,9 +8,11 @@ import se.alex.lexicon.g51todoapi.entity.Role;
 public class RoleConverter {
 
     public RoleDTOView toRoleDTOView(Role entity) {
-        return RoleDTOView.builder()
-                .id( Long.valueOf ( Long.valueOf ( entity.getId() ) ) )
-                .name(entity.getName())
+        RoleDTOView.RoleDTOViewBuilder builder;
+        builder = RoleDTOView.builder( );
+        builder.id( Long.valueOf( Long.parseLong( String.valueOf( entity.getId( ) ) ) ) );
+        builder.name( entity.getName( ) );
+        return builder
                 .build();
     }
 }

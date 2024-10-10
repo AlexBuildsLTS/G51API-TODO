@@ -1,5 +1,6 @@
 package se.alex.lexicon.g51todoapi.service;
 
+import se.alex.lexicon.g51todoapi.domain.dto.TaskDTO;
 import se.alex.lexicon.g51todoapi.domain.dto.TaskDTOForm;
 import se.alex.lexicon.g51todoapi.domain.dto.TaskDTOView;
 
@@ -13,4 +14,8 @@ public interface TaskService {
     List<TaskDTOView> getAllTasks();
 
     void markAsDone(Long id);
+
+    void deleteTask ( Long id );
+
+    TaskDTO updateTask ( Long id, TaskDTO taskDTO );
 }

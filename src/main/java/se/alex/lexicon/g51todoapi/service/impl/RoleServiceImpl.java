@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class RoleServiceImpl {
+                                                    public class RoleServiceImpl {
 
     private final RoleRepository roleRepository;
     private final RoleConverter roleConverter;

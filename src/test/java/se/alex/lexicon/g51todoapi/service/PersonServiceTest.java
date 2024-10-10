@@ -2,8 +2,6 @@ package se.alex.lexicon.g51todoapi.service;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class PersonServiceTest {
 
     @Test
@@ -36,5 +34,17 @@ class PersonServiceTest {
 
     @Test
     void testUpdatePerson ( ) {
+    }
+
+    @Test
+    void findByName ( ) {
+    }
+
+    @Test
+    void findByEmail ( ) {
+    }
+
+    @Test
+    void get ( ) {
     }
 }

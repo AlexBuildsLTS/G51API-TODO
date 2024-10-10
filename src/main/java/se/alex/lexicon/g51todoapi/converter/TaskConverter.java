@@ -1,6 +1,7 @@
 package se.alex.lexicon.g51todoapi.converter;
 
 import lombok.*;
+import org.jetbrains.annotations.Contract;
 import org.springframework.stereotype.Component;
 import se.alex.lexicon.g51todoapi.domain.dto.PersonDTOView;
 import se.alex.lexicon.g51todoapi.domain.dto.TaskDTOForm;
@@ -18,7 +19,7 @@ public class TaskConverter {
 
     private final PersonConverter personConverter;
 
-    @org.jetbrains.annotations.Contract(pure = true)
+    @Contract(pure = true)
     private TaskConverter ( PersonConverter personConverter ) {
         this.personConverter = personConverter;
     }
@@ -51,7 +52,11 @@ public class TaskConverter {
 
     private static class PersonConverter {
 
-        public PersonDTOView toPersonDTOView( Person ignoredPerson ) {
+        public PersonDTOView toPersonDTOView( ) {
+            return toPersonDTOView( null );
+        }
+
+        private PersonDTOView toPersonDTOView( Person ignoredPerson ) {
             return null;
         }
     }
