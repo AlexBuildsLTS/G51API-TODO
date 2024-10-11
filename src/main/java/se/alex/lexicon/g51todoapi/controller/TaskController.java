@@ -1,7 +1,6 @@
 package se.alex.lexicon.g51todoapi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,26 +17,27 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    public TaskController ( TaskService taskService ) {
+    @Autowired
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
+    @PostMapping
+    public ResponseEntity<TaskDTOView> createTask(@RequestBody TaskDTOForm taskDTOForm) {
+        TaskDTOView createdTask = taskService.createTask(taskDTOForm);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
+    }
+
     @GetMapping
-    public HttpEntity< List< TaskDTOView>> getAllTasks() {
-        List < TaskDTOView > tasks = taskService.getAllTasks();
+    public ResponseEntity<List<TaskDTOView>> getAllTasks() {
+        List<TaskDTOView> tasks = taskService.getAllTasks();
         return ResponseEntity.ok(tasks);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity < TaskDTOView > getTaskById( @PathVariable Long id) {
+    public ResponseEntity<TaskDTOView> getTaskById(@PathVariable Long id) {
         TaskDTOView task = taskService.getTaskById(id);
         return ResponseEntity.ok(task);
-    }
-
-    @PostMapping
-    public HttpEntity< TaskDTOView> createTask( @RequestBody TaskDTOForm taskDTO) {
-        TaskDTOView createdTask = taskService.createTask(taskDTO);
-        return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

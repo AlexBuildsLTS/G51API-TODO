@@ -1,6 +1,5 @@
 package se.alex.lexicon.g51todoapi.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +10,6 @@ import se.alex.lexicon.g51todoapi.service.UserService;
 
 import java.util.List;
 
-/**
- * REST Controller for managing User-related operations.
- */
-@Valid
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -26,44 +21,33 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<UserDTOView> registerUser(@Valid @RequestBody UserDTOForm userDTOForm) {
-        UserDTOView userDTOView = userService.register(userDTOForm);
-        return new ResponseEntity<>(userDTOView, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{email}")
-    public ResponseEntity<UserDTOView> getUserByEmail(@PathVariable String email) {
-        UserDTOView userDTOView = userService.getByEmail(email);
-        if (userDTOView == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(userDTOView, HttpStatus.OK);
+    @PostMapping("/register")
+    public ResponseEntity<UserDTOView> registerUser(@RequestBody UserDTOForm userDTOForm) {
+        UserDTOView createdUser = userService.register(userDTOForm);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @GetMapping
     public ResponseEntity<List<UserDTOView>> getAllUsers() {
-        List<UserDTOView> users = (List < UserDTOView >) userService.getAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        List<UserDTOView> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<UserDTOView> getUserByEmail(@PathVariable String email) {
+        UserDTOView user = userService.getByEmail(email);
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{email}/disable")
     public ResponseEntity<Void> disableUser(@PathVariable String email) {
-        try {
-            userService.disableByEmail(email);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        userService.disableUserByEmail(email);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{email}/enable")
     public ResponseEntity<Void> enableUser(@PathVariable String email) {
-        try {
-            userService.enableByEmail(email);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        userService.enableUserByEmail(email);
+        return ResponseEntity.noContent().build();
     }
 }
