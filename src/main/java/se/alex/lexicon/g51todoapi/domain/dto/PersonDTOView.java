@@ -13,5 +13,5 @@ public class PersonDTOView {
     private Long id;
     private String name;
     private String email;
-    private Set<TaskDTOView> tasks;  // Linked tasks if needed
+    private Set<TaskDTOView> tasks;  // will add tasks promise
 }

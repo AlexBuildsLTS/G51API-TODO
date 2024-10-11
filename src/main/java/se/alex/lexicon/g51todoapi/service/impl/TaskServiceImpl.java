@@ -9,6 +9,7 @@ import se.alex.lexicon.g51todoapi.domain.dto.TaskDTOForm;
 import se.alex.lexicon.g51todoapi.domain.dto.TaskDTOView;
 import se.alex.lexicon.g51todoapi.entity.Person;
 import se.alex.lexicon.g51todoapi.entity.Task;
+import se.alex.lexicon.g51todoapi.exception.DataNotFoundException;
 import se.alex.lexicon.g51todoapi.repository.PersonRepository;
 import se.alex.lexicon.g51todoapi.repository.TaskRepository;
 import se.alex.lexicon.g51todoapi.service.TaskService;
@@ -34,7 +35,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public TaskDTOView createTask(TaskDTOForm taskDTOForm) {
         Person person = personRepository.findById(taskDTOForm.getPersonId())
-                .orElseThrow(() -> new IllegalArgumentException("Person not found with ID: " + taskDTOForm.getPersonId()));
+                .orElseThrow(() -> new DataNotFoundException("Person not found with ID: " + taskDTOForm.getPersonId()));
         Task task = taskConverter.toTaskEntity(taskDTOForm, person);
         Task savedTask = taskRepository.save(task);
         return taskConverter.toTaskDTOView(savedTask);
@@ -43,7 +44,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDTOView getTaskById(Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Task not found with ID: " + id));
+                .orElseThrow(() -> new DataNotFoundException("Task not found with ID: " + id));
         return taskConverter.toTaskDTOView(task);
     }
 
@@ -53,26 +54,32 @@ public class TaskServiceImpl implements TaskService {
                 .map(taskConverter::toTaskDTOView)
                 .collect(Collectors.toList());
     }
-    @Override
-    public void deleteTask ( Long id ) {
-
-    }
-
 
     @Override
-    public TaskDTO updateTask ( Long id, TaskDTO taskDTO ) {
-        return null;
+    @Transactional
+    public void deleteTask(Long id) {
+        if (!taskRepository.existsById(id)) {
+            throw new DataNotFoundException("Task not found with ID: " + id);
+        }
+        taskRepository.deleteById(id);
     }
 
+    @Override
+    @Transactional
+    public TaskDTO updateTask(Long id, TaskDTO taskDTO) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Task not found with ID: " + id));
+        taskConverter.updateTaskEntityFromDTO(taskDTO, task);
+        Task updatedTask = taskRepository.save(task);
+        return taskConverter.toTaskDTO(updatedTask);
+    }
 
     @Override
     @Transactional
     public void markAsDone(Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Task not found with ID: " + id));
+                .orElseThrow(() -> new DataNotFoundException("Task not found with ID: " + id));
         task.setDone(true);
         taskRepository.save(task);
     }
-
-
 }

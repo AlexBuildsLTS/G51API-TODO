@@ -7,6 +7,7 @@ import se.alex.lexicon.g51todoapi.converter.UserConverter;
 import se.alex.lexicon.g51todoapi.domain.dto.UserDTOForm;
 import se.alex.lexicon.g51todoapi.domain.dto.UserDTOView;
 import se.alex.lexicon.g51todoapi.entity.User;
+import se.alex.lexicon.g51todoapi.exception.DataNotFoundException;
 import se.alex.lexicon.g51todoapi.repository.UserRepository;
 import se.alex.lexicon.g51todoapi.service.UserService;
 
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTOView getByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User with email " + email + " not found"));
+                .orElseThrow(() -> new DataNotFoundException("User with email " + email + " not found"));
         return userConverter.toUserDTOView(user);
     }
 
@@ -48,35 +49,37 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     */
     @Override
-    public void disableUserByEmail ( String email ) {
-
-    }
-
-    /**
-     */
-    @Override
-    public void enableUserByEmail ( String email ) {
-
-    }
-
     @Transactional
-    @Override
-    public void disableByEmail ( String email ) {
+    public void disableUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User with email " + email + " not found"));
+                .orElseThrow(() -> new DataNotFoundException("User with email " + email + " not found"));
         user.setEnabled(false);
         userRepository.save(user);
     }
 
-    @Transactional
     @Override
-    public void enableByEmail ( String email ) {
+    @Transactional
+    public void enableUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User with email " + email + " not found"));
+                .orElseThrow(() -> new DataNotFoundException("User with email " + email + " not found"));
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    /**
+     * @param email
+     */
+    @Override
+    public void disableByEmail ( String email ) {
+
+    }
+
+    /**
+     * @param email
+     */
+    @Override
+    public void enableByEmail ( String email ) {
+
     }
 }

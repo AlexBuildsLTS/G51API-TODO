@@ -1,11 +1,10 @@
 package se.alex.lexicon.g51todoapi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import se.alex.lexicon.g51todoapi.domain.dto.RoleDTOForm;
 import se.alex.lexicon.g51todoapi.domain.dto.RoleDTOView;
 import se.alex.lexicon.g51todoapi.service.UserRoleService;
 
@@ -15,16 +14,40 @@ import java.util.List;
 @RequestMapping("/api/roles")
 public class RoleController {
 
-    private final UserRoleService roleService;
+    private final UserRoleService userRoleService;
 
     @Autowired
-    public RoleController( UserRoleService roleService) {
-        this.roleService = roleService;
+    public RoleController(UserRoleService userRoleService) {
+        this.userRoleService = userRoleService;
     }
 
-    @GetMapping("/all")
-    public HttpEntity<Object> getAllRoles() {
-        List<RoleDTOView> roles = roleService.getAll();
+    @PostMapping
+    public ResponseEntity<RoleDTOView> createRole(@RequestBody RoleDTOForm roleDTOForm) {
+        RoleDTOView createdRole = userRoleService.createRole(roleDTOForm);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdRole);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RoleDTOView>> getAllRoles() {
+        List<RoleDTOView> roles = userRoleService.getAllRoles();
         return ResponseEntity.ok(roles);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RoleDTOView> getRoleById(@PathVariable Long id) {
+        RoleDTOView role = userRoleService.findRoleById(id);
+        return ResponseEntity.ok(role);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RoleDTOView> updateRole(@PathVariable Long id, @RequestBody RoleDTOForm roleDTOForm) {
+        RoleDTOView updatedRole = userRoleService.updateRole(id, roleDTOForm);
+        return ResponseEntity.ok(updatedRole);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
+        userRoleService.deleteRole(id);
+        return ResponseEntity.noContent().build();
     }
 }

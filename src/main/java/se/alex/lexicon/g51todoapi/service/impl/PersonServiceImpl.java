@@ -3,6 +3,7 @@ package se.alex.lexicon.g51todoapi.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.alex.lexicon.g51todoapi.converter.PersonConverter;
+import se.alex.lexicon.g51todoapi.domain.dto.PersonDTO;
 import se.alex.lexicon.g51todoapi.domain.dto.PersonDTOForm;
 import se.alex.lexicon.g51todoapi.domain.dto.PersonDTOView;
 import se.alex.lexicon.g51todoapi.entity.Person;
@@ -35,7 +36,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonDTOView getPersonById(Long id) {
         Person person = personRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Person with ID " + id + " not found."));
+                .orElseThrow(() -> new DataNotFoundException("Person not found with ID: " + id));
         return personConverter.toPersonDTOView(person);
     }
 
@@ -48,23 +49,23 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonDTOView> getPersonsByName(String name) {
-        return personRepository.findByName(name).stream()
+        return personRepository.findByNameContaining(name).stream()
                 .map(personConverter::toPersonDTOView)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<PersonDTOView> getPersonsByEmail(String email) {
-        return personRepository.findByEmail(email).stream()
+        return personRepository.findByEmailContaining(email).stream()
                 .map(personConverter::toPersonDTOView)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public PersonDTOView updatePerson(PersonDTOView personDTOView) {
-        Person person = personRepository.findById(personDTOView.getId())
-                .orElseThrow(() -> new DataNotFoundException("Person with ID " + personDTOView.getId() + " not found."));
-        personConverter.updatePersonEntityFromDTO(personDTOView, person);
+    public PersonDTOView updatePerson(PersonDTO personDTO) {
+        Person person = personRepository.findById(personDTO.getId())
+                .orElseThrow(() -> new DataNotFoundException("Person not found with ID: " + personDTO.getId()));
+        personConverter.updateFromPersonDTO(personDTO, person);
         Person updatedPerson = personRepository.save(person);
         return personConverter.toPersonDTOView(updatedPerson);
     }

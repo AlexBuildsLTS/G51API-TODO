@@ -1,6 +1,7 @@
 package se.alex.lexicon.g51todoapi.converter;
 
 import org.springframework.stereotype.Component;
+import se.alex.lexicon.g51todoapi.domain.dto.PersonDTO;
 import se.alex.lexicon.g51todoapi.domain.dto.PersonDTOView;
 import se.alex.lexicon.g51todoapi.entity.Person;
 
@@ -17,7 +18,7 @@ public class PersonConverter {
                 .id(person.getId())
                 .name(person.getName())
                 .email(person.getUser() != null ? person.getUser().getEmail() : null)
-                .tasks(null) // If there are tasks, add proper conversion here.
+                .tasks(null) //
                 .build();
     }
 
@@ -29,7 +30,7 @@ public class PersonConverter {
         }
 
         person.setName(personDTOView.getName());
-        // You can add more fields as needed, such as email if applicable.
+
     }
 
     public PersonDTOForm newPersonDTOForm ( ) {
@@ -44,7 +45,11 @@ public class PersonConverter {
         return null;
     }
 
-    public class PersonDTOForm {
+    public void updateFromPersonDTO ( PersonDTO personDTO, Person person ) {
+
+    }
+
+    public static class PersonDTOForm {
         private PersonDTOForm ( ) {
         }
     }

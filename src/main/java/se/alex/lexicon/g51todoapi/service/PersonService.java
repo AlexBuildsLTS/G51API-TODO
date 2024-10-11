@@ -1,5 +1,6 @@
 package se.alex.lexicon.g51todoapi.service;
 
+import se.alex.lexicon.g51todoapi.domain.dto.PersonDTO;
 import se.alex.lexicon.g51todoapi.domain.dto.PersonDTOForm;
 import se.alex.lexicon.g51todoapi.domain.dto.PersonDTOView;
 
@@ -13,5 +14,5 @@ public interface PersonService {
     List<PersonDTOView> getPersonsByName ( String name );
 
     List<PersonDTOView> getPersonsByEmail( String email);
-    PersonDTOView updatePerson(PersonDTOView personDTOView);
+    PersonDTOView updatePerson( PersonDTO personDTO);
 }

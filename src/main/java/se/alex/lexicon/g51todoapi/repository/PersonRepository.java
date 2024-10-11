@@ -6,6 +6,8 @@ import se.alex.lexicon.g51todoapi.entity.Person;
 import java.util.List;
 
 public interface PersonRepository extends JpaRepository<Person, Long> {
-    List<Person> findByName(String name);
-    List<Person> findByEmail(String email);
-}
+    List<Person> findByNameContaining(String name);
+    List<Person> findByEmailContaining(String email);
+
+    }
+

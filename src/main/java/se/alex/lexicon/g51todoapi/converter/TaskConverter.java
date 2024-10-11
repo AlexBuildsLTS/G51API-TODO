@@ -3,7 +3,7 @@ package se.alex.lexicon.g51todoapi.converter;
 import lombok.*;
 import org.jetbrains.annotations.Contract;
 import org.springframework.stereotype.Component;
-import se.alex.lexicon.g51todoapi.domain.dto.PersonDTOView;
+import se.alex.lexicon.g51todoapi.domain.dto.TaskDTO;
 import se.alex.lexicon.g51todoapi.domain.dto.TaskDTOForm;
 import se.alex.lexicon.g51todoapi.domain.dto.TaskDTOView;
 import se.alex.lexicon.g51todoapi.entity.Person;
@@ -50,14 +50,29 @@ public class TaskConverter {
                 .build();
     }
 
-    private static class PersonConverter {
-
-        public PersonDTOView toPersonDTOView( ) {
-            return toPersonDTOView( null );
+    public void updateTaskEntityFromDTO(TaskDTO taskDTO, Task task) {
+        if (taskDTO == null || task == null) {
+            return;
         }
 
-        private PersonDTOView toPersonDTOView( Person ignoredPerson ) {
+        task.setTitle(taskDTO.getTitle());
+        task.setDescription(taskDTO.getDescription());
+        task.setDeadline(taskDTO.getDeadline());
+        task.setDone(taskDTO.isDone());
+        // You might need to handle updating the associated Person here if that's allowed
+    }
+
+    public TaskDTO toTaskDTO(Task entity) {
+        if (entity == null) {
             return null;
         }
+
+        return TaskDTO.builder()
+                .id(entity.getId())
+                .title(entity.getTitle())
+                .description(entity.getDescription())
+                .deadline(entity.getDeadline())
+                .done(entity.isDone())
+                .build();
     }
 }
